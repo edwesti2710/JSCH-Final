@@ -107,6 +107,7 @@ while ((step >= 0) && (step <= 4)) {
             let motherboardSelected = motherboards[keysMotherboards[userMotherboard]];
             let motherboardsCompatibles = [];
             motherboardSelected.forEach(element => {
+                // Filtrando motherboards por tipo de socket para la compatibilidad con el procesador
                 if (element.socket === processors[keysProcessors[userProcessor]][userProcessorFinal].socket) {
                     motherboardsCompatibles.push(element);
                 }
