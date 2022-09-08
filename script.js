@@ -46,7 +46,7 @@ const processors = {
 
 // Variables de Usuario
 let userProcessor, userProcessorFinal, userMotherboard, userMotherboardFinal;
-
+let carrito = [];
 // Enlistando los procesadores que hay
 let keysMotherboards;
 let keysProcessors;
@@ -80,6 +80,8 @@ while ((step >= 0) && (step <= 4)) {
             });
             userProcessorFinal = parseInt(prompt(`Tenemos disponible: ${resultado}`)) - 1;
             if (processorsSelected[userProcessorFinal] !== undefined) {
+                // Agregando el procesador al carrito
+                carrito.push(processors[keysProcessors[userProcessor]][userProcessorFinal])
                 step++;
             } else {
                 alert("El valor ingresado es inválido.");
@@ -117,6 +119,8 @@ while ((step >= 0) && (step <= 4)) {
             });
             let userMotherboardTemp = parseInt(prompt(`Tenemos disponible: ${resultado}`)) - 1;
             if (motherboardsCompatibles[userMotherboardTemp] !== undefined) {
+                // Agregando la motherboard al carrito
+                carrito.push(motherboardsCompatibles[userMotherboardTemp])
                 userMotherboardFinal = motherboardsCompatibles[userMotherboardTemp]
                 step++;
             } else {
@@ -125,9 +129,12 @@ while ((step >= 0) && (step <= 4)) {
             break;
     }
 }
+function CalcularTotal(){
+    let costoTotal = carrito.reduce((obj1,obj2)=>obj1 + obj2.finalPrice(), 0)
+    return costoTotal;
+}
 mensaje = `Usted ha elegido:
-Procesador: ${processors[keysProcessors[userProcessor]][userProcessorFinal].name.toUpperCase()} de la marca ${processors[keysProcessors[userProcessor]][userProcessorFinal].brand.toUpperCase()}, este producto tiene un costo de: ${localMoneda} ${processors[keysProcessors[userProcessor]][userProcessorFinal].finalPrice()}
-Motherboard ${userMotherboardFinal.name.toUpperCase()} de la marca ${userMotherboardFinal.brand.toUpperCase()}, este producto tiene un costo de: ${localMoneda} ${userMotherboardFinal.finalPrice()}
-El costo total de los productos es: ${localMoneda} ${userMotherboardFinal.finalPrice() + processors[keysProcessors[userProcessor]][userProcessorFinal].finalPrice()
-}`
+Procesador: ${carrito[0].name.toUpperCase()} de la marca ${carrito[0].brand.toUpperCase()}, este producto tiene un costo de: ${localMoneda} ${carrito[0].finalPrice()}
+Motherboard ${carrito[1].name.toUpperCase()} de la marca ${carrito[1].brand.toUpperCase()}, este producto tiene un costo de: ${localMoneda} ${carrito[1].finalPrice()}
+El costo total de los productos es: ${localMoneda} ${CalcularTotal()}`
 alert(mensaje)
