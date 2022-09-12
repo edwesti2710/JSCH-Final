@@ -114,7 +114,6 @@ while ((step >= 0) && (step <= 4)) {
             motherboardSelected.forEach(element => {
                 // Filtrando motherboards por tipo de socket para la compatibilidad con el procesador
                 motherboardsCompatibles = motherboardSelected.filter(obj => obj.socket === processors[keysProcessors[userProcessor]][userProcessorFinal].socket);
-                console.log(`element.socket = ${element.socket}`)
             });
             motherboardsCompatibles.forEach(element => {
                 resultado += `${motherboardsCompatibles.indexOf(element) + 1} - ${element.name} - ${localMoneda} ${element.finalPrice()}\n`;
