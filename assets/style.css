@@ -1,4 +1,8 @@
 /* PALETA DE COLORES */
+/* --color0: ·#F1F1F1;
+--color1: ·#FDB827;
+--color2: ·#21209C;
+--color3: ·#23120B; */
  
  
  *, *::after, *::before{
@@ -6,11 +10,6 @@
      margin: 0;
      box-sizing: border-box;
      font-family: sans-serif;
-     --color0: ·#F1F1F1;
-     --color1: ·#FDB827;
-     --color2: ·#21209C;
-     --color3: ·#23120B;
-
 }
 
 img {
@@ -67,7 +66,6 @@ main {
 
 main section {
     width: 70vw;
-    /* background-color: green; */
 }
 
 .processorBrand {
