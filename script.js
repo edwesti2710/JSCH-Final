@@ -177,3 +177,9 @@ src="${carrito[1].img}" alt="${carrito[1].name}">
 // TOTAL
 let total = document.querySelector('.total')
 total.innerHTML = `<h3>TOTAL: ${localMoneda} ${CalcularTotal()}</h3>`
+
+
+// Funciones Generales
+function recargarPagina(){
+    location.reload();
+}
