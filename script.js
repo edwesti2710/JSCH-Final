@@ -100,7 +100,7 @@ function drawOptions() {
         case 3:
             keysMotherboards = Object.keys(motherboards);
             for (let i = 0; i < keysMotherboards.length; i++) {
-                resultado += `<option value="${i}">${keysMotherboards[i]}</option>`;
+                resultado += `<option value="${i}">${keysMotherboards[i].toUpperCase()}</option>`;
             }
             let motherboardBrandHtml = document.getElementById('step3');
             motherboardBrandHtml.innerHTML = `<label for="brandMotherboard">Seleccione la marca de motherboard que prefiere:</label>
