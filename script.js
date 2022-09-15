@@ -46,87 +46,144 @@ const processors = {
 }
 
 // Variables de Usuario
-let userProcessor, userProcessorFinal, userMotherboard, userMotherboardFinal;
+let userProcessor, userProcessorFinal, userMotherboard, userMotherboardFinal, motherboardsCompatibles;
 let carrito = [];
 // Enlistando los procesadores que hay
 let keysMotherboards;
 let keysProcessors;
 
+drawOptions();
 
-
-alert('Bienvenido a PCBuild \nArma la computadora que necesites!');
-while ((step >= 0) && (step <= 4)) {
-    let resultado = '\n'
+// Dibujar opciones
+function drawOptions() {
+    let resultado = ``
     switch (step) {
         // Seleccione la marca de procesador
         case 1:
             keysProcessors = Object.keys(processors);
             for (let i = 0; i < keysProcessors.length; i++) {
-                resultado += `${i + 1} - ${keysProcessors[i]}\n`;
+                resultado += `<option value="${i}">${keysProcessors[i].toUpperCase()}</option>`;
             }
-
-            userProcessor = parseInt(prompt(`Seleccione la marca de procesador que prefiere: ${resultado.toUpperCase()}`)) - 1;
-            let imgProcessorBrand = '';
-            if (keysProcessors[userProcessor] !== undefined) {
-                step++;
-            } else {
-                alert("El valor ingresado es inválido.")
+            let brandsProcessor = document.getElementById('step1');
+            brandsProcessor.innerHTML = `<label for="brandProcessor">Seleccione la marca que prefiere:</label>
+            <select name="brandProcessor" id="brandProcessor">
+                ${resultado}
+            </select>
+            <button type="submit" id="buttonBrandProcessor">Aceptar</button>`;
+            let buttonBrandProcessor = document.getElementById('buttonBrandProcessor');
+            buttonBrandProcessor.onclick = (e) => {
+                e.preventDefault(); // prevent
+                sendData()
             }
             break;
         // Seleccione la el modelo de procesador
         case 2:
-            resultado = '\n'
             // Analizando por el procesador que eligio el usuario
             let processorsSelected = processors[keysProcessors[userProcessor]];
             processorsSelected.forEach(element => {
-                resultado += `${processorsSelected.indexOf(element) + 1} - ${element.name} - ${localMoneda} ${element.finalPrice()}\n`;
+                resultado += `<option value="${processorsSelected.indexOf(element)}">${element.name} - ${localMoneda} ${element.finalPrice()}</option>`
             });
-            userProcessorFinal = parseInt(prompt(`Tenemos disponible: ${resultado}`)) - 1;
-            if (processorsSelected[userProcessorFinal] !== undefined) {
-                // Agregando el procesador al carrito
-                carrito.push(processors[keysProcessors[userProcessor]][userProcessorFinal])
-                step++;
-            } else {
-                alert("El valor ingresado es inválido.");
+
+            let processorHtml = document.getElementById('step2');
+            processorHtml.innerHTML = `<label for="processor">Seleccione el procesador:</label>
+            <select name="processor" id="processor">
+            ${resultado}
+            </select><button type="submit" id="buttonProcessor">Aceptar</button>`
+
+            let buttonProcessor = document.getElementById('buttonProcessor');
+            buttonProcessor.onclick = (e) => {
+                e.preventDefault(); // prevent
+                sendData()
             }
             break;
         // Seleccione la marca de Motherboards
         case 3:
-            resultado = '\n'
-
             keysMotherboards = Object.keys(motherboards);
             for (let i = 0; i < keysMotherboards.length; i++) {
-                resultado += `${i + 1} - ${keysMotherboards[i]}\n`;
+                resultado += `<option value="${i}">${keysMotherboards[i]}</option>`;
             }
-            userMotherboard = parseInt(prompt(`Seleccione la marca de motherboard que prefiere: ${resultado.toUpperCase()}`)) - 1;
-            if (keysMotherboards[userMotherboard] !== undefined) {
-                step++;
-            } else {
-                alert("El valor ingresado es inválido.")
+            let motherboardBrandHtml = document.getElementById('step3');
+            motherboardBrandHtml.innerHTML = `<label for="brandMotherboard">Seleccione la marca de motherboard que prefiere:</label>
+            <select name="brandMotherboard" id="brandMotherboard">
+                ${resultado}
+            </select>
+            <button type="submit" id="buttonMotherboardBrand">Aceptar</button>`
+
+            let buttonMotherboardBrand = document.getElementById('buttonMotherboardBrand');
+            buttonMotherboardBrand.onclick = (e) => {
+                e.preventDefault(); // prevent
+                sendData()
             }
             break;
         // Seleccione la el modelo de motherboard
         case 4:
-            resultado = '\n'
             // Analizando por la motherboard que eligio el usuario
             let motherboardSelected = motherboards[keysMotherboards[userMotherboard]];
-            let motherboardsCompatibles = [];
+            motherboardsCompatibles = [];
             motherboardSelected.forEach(element => {
                 // Filtrando motherboards por tipo de socket para la compatibilidad con el procesador
                 motherboardsCompatibles = motherboardSelected.filter(obj => obj.socket === processors[keysProcessors[userProcessor]][userProcessorFinal].socket);
             });
             motherboardsCompatibles.forEach(element => {
-                resultado += `${motherboardsCompatibles.indexOf(element) + 1} - ${element.name} - ${localMoneda} ${element.finalPrice()}\n`;
+                resultado += `<option value="${motherboardsCompatibles.indexOf(element)}">${element.name} - ${localMoneda} ${element.finalPrice()}</option>`;
             });
-            let userMotherboardTemp = parseInt(prompt(`Tenemos disponible: ${resultado}`)) - 1;
-            if (motherboardsCompatibles[userMotherboardTemp] !== undefined) {
-                // Agregando la motherboard al carrito
-                carrito.push(motherboardsCompatibles[userMotherboardTemp])
-                userMotherboardFinal = motherboardsCompatibles[userMotherboardTemp]
-                step++;
-            } else {
-                alert("El valor ingresado es inválido.");
+
+            let motherboardHtml = document.getElementById('step4');
+            motherboardHtml.innerHTML = `<label for="motherboard">Seleccione la marca que prefiere:</label>
+            <select name="motherboard" id="motherboard">
+                ${resultado}
+            </select>
+            <button type="submit" id="buttonMotherboard">Aceptar</button>`
+
+            let buttonMotherboard = document.getElementById('buttonMotherboard');
+            buttonMotherboard.onclick = (e) => {
+                e.preventDefault(); // prevent
+                sendData()
             }
+            break;
+    }
+}
+
+function sendData() {
+    switch (step) {
+        // Seleccione la marca de procesador
+        case 1:
+            let brandProcessor = document.getElementById('brandProcessor');
+            userProcessor = brandProcessor.value;
+            step++;
+            document.getElementById('step1').remove()
+            drawOptions();
+            break;
+        // Seleccione la el modelo de procesador
+        case 2:
+            let processor = document.getElementById('processor');
+            userProcessorFinal = processor.value;
+            // Agregando el procesador al carrito
+            carrito.push(processors[keysProcessors[userProcessor]][userProcessorFinal])
+            step++;
+            document.getElementById('step2').remove()
+            drawOptions();
+            break;
+        // Seleccione la marca de Motherboards
+        case 3:
+            let brandMotherboard = document.getElementById('brandMotherboard');
+            userMotherboard = brandMotherboard.value;
+            step++;
+            document.getElementById('step3').remove()
+            drawOptions();
+            break;
+
+        // Seleccione la el modelo de motherboard
+        case 4:
+            let motherboard = document.getElementById('motherboard');
+            userMotherboardTemp = motherboard.value;
+            carrito.push(motherboardsCompatibles[userMotherboardTemp])
+            userMotherboardFinal = motherboardsCompatibles[userMotherboardTemp]
+            step++;
+            document.getElementById('step4').remove()
+            drawResult();
+            // Mostrar Objetos ocultos 
+            document.getElementById("result").style.display = "block";
             break;
     }
 }
@@ -135,17 +192,19 @@ function CalcularTotal() {
     return costoTotal;
 }
 
-// Dibujando elementos en la web
-// ProcessorBrand
-let processorBrand = document.querySelector('.processorBrand')
-processorBrand.innerHTML = `<article class="item">
+
+function drawResult() {
+    // Dibujando elementos en la web
+    // ProcessorBrand
+    let processorBrand = document.querySelector('.processorBrand')
+    processorBrand.innerHTML = `<article class="item">
 <div class="imgContainer">
     <img src="./assets/img/${carrito[0].brand.toUpperCase()}_Logo.svg" alt="${carrito[0].brand} Logo">
 </div>
 </article>`
-// Processor
-let processor = document.querySelector('.processor')
-processor.innerHTML = `<article class="item">
+    // Processor
+    let processor = document.querySelector('.processor')
+    processor.innerHTML = `<article class="item">
 <div class="imgContainer">
     <img
         src="${carrito[0].img}" alt="${carrito[0].name}">
@@ -155,16 +214,16 @@ processor.innerHTML = `<article class="item">
     <h3>${localMoneda} ${carrito[0].finalPrice()}</h3>
 </div>
 </article>`
-// MotherboardBrand
-let motherboardBrand = document.querySelector('.motherboardBrand')
-motherboardBrand.innerHTML = `<article class="item">
+    // MotherboardBrand
+    let motherboardBrand = document.querySelector('.motherboardBrand')
+    motherboardBrand.innerHTML = `<article class="item">
 <div class="imgContainer">
     <img src="./assets/img/${carrito[1].brand.toUpperCase()}_Logo.svg" alt="${carrito[1].brand} Logo">
 </div>
 </article>`
-// Motherboard
-let motherboard = document.querySelector('.motherboard')
-motherboard.innerHTML = `<article class="item">
+    // Motherboard
+    let motherboard = document.querySelector('.motherboard')
+    motherboard.innerHTML = `<article class="item">
 <div class="imgContainer">
 <img
 src="${carrito[1].img}" alt="${carrito[1].name}">
@@ -174,12 +233,15 @@ src="${carrito[1].img}" alt="${carrito[1].name}">
     <h3>${localMoneda} ${carrito[1].finalPrice()}</h3>
 </div>
 </article>`
-// TOTAL
-let total = document.querySelector('.total')
-total.innerHTML = `<h3>TOTAL: ${localMoneda} ${CalcularTotal()}</h3>`
+    // TOTAL
+    let total = document.querySelector('.total')
+    total.innerHTML = `<h3>TOTAL: ${localMoneda} ${CalcularTotal()}</h3>`
+}
 
+// Desaparecer objetos innecesarios
+document.getElementById("result").style.display = "none";
 
 // Funciones Generales
-function recargarPagina(){
+function recargarPagina() {
     location.reload();
 }
